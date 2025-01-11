@@ -2,7 +2,7 @@
 	const { data } = $props();
 
 	let kamasValues = $state(data.data);
-	let maxValue = $state({ serverName: '', paypalValue: 0 });
+	let maxValue = $state({ serverName: '', paypalValue: 0, status: '' });
 	let audio: HTMLAudioElement;
 	let audioEnabled = $state(false);
 	let intervalValue = $state(30);
@@ -12,9 +12,9 @@
 		return data.reduce(
 			(max, item) => {
 				const paypalValue = parseFloat(item.paypalValue.replace('€/M', ''));
-				return paypalValue > max.paypalValue ? { serverName: item.serverName, paypalValue } : max;
+				return paypalValue > max.paypalValue ? { serverName: item.serverName, paypalValue, status: item.status } : max;
 			},
-			{ serverName: '', paypalValue: 0 }
+			{ serverName: '', paypalValue: 0, status: ''}
 		);
 	};
 
@@ -39,7 +39,8 @@
 			const values = data.map((item) => {
 				return {
 					serverName: item.serverName,
-					paypalValue: parseFloat(item.paypalValue.replace('€/M', ''))
+					paypalValue: parseFloat(item.paypalValue.replace('€/M', '')),
+					status: item.status
 				};
 			});
 
@@ -50,7 +51,7 @@
 							audio.play();
 						}
 
-						alert(`${item.serverName} is above the threshold of ${threshold}€/M`);
+						alert(`${item.serverName} is above the threshold of ${threshold}€/M, status: ${item.status}`);
 					}
 				});
 			}
@@ -58,10 +59,10 @@
 			maxValue = values.reduce(
 				(max, item) => {
 					return item.paypalValue > max.paypalValue
-						? { serverName: item.serverName, paypalValue: item.paypalValue }
+						? { serverName: item.serverName, paypalValue: item.paypalValue, status: item.status }
 						: max;
 				},
-				{ serverName: '', paypalValue: 0 }
+				{ serverName: '', paypalValue: 0, status: '' }
 			);
 		} catch (error) {
 			console.error('Error fetching data contact developer', error);
@@ -106,6 +107,7 @@
 		<h2 class="text-lg font-semibold">Melhor valor:</h2>
 		<p class="text-gray-700">Server: {maxValue.serverName}</p>
 		<p class="text-gray-700">Value: {maxValue.paypalValue}€/M</p>
+		<p class="text-gray-700">Status: {maxValue.status}</p>
 	</div>
 
 	<div class="bg-gray-100 p-4 rounded-lg">

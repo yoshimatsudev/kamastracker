@@ -14,13 +14,14 @@ export async function GET() {
 
 const getTableData = (html: string) => {
   const $ = cheerio.load(html);
-  const paypalValues: { serverName: string, paypalValue: string }[] = [];
+  const paypalValues: { serverName: string, paypalValue: string, status: string }[] = [];
 
   $('tr').each((index, element) => {
     const serverName = $(element).find('td').first().text().trim();
     if (serverName.startsWith('Dakal')) {
       const paypalValue = $(element).find('td').eq(1).text().trim();
-      paypalValues.push({ serverName, paypalValue });
+      const status = $(element).find('td').eq(8).text().trim();
+      paypalValues.push({ serverName, paypalValue, status });
     }
   });
 
