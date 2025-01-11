@@ -5,6 +5,7 @@
 	let maxValue = $state({ serverName: '', paypalValue: 0 });
 	let audio: HTMLAudioElement;
 	let audioEnabled = $state(false);
+	let intervalValue = $state(30);
 	let threshold = $state(0);
 
 	const getMaxValue = (data) => {
@@ -20,6 +21,11 @@
 	function updateThreshold(event) {
 		threshold = parseFloat(event.target.value);
 		localStorage.setItem('threshold', threshold.toString());
+	}
+
+	function updateIntervalValue(event) {
+		intervalValue = parseFloat(event.target.value);
+		localStorage.setItem('intervalValue', intervalValue.toString());
 	}
 
 	maxValue = getMaxValue(kamasValues);
@@ -67,7 +73,7 @@
 	}
 
 	$effect(() => {
-		setInterval(fetchDataAndCheckAlarms, 1 * 60 * 1000);
+		setInterval(fetchDataAndCheckAlarms, intervalValue * 60 * 1000);
 
 		// fetchDataAndCheckAlarms();
 	});
@@ -76,6 +82,13 @@
 		const storedThreshold = localStorage.getItem('threshold');
 		if (storedThreshold) {
 			threshold = parseFloat(storedThreshold);
+		}
+	})
+
+	$effect(() => {
+		const storedIntervalValue = localStorage.getItem('intervalValue');
+		if (storedIntervalValue) {
+			intervalValue = parseFloat(storedIntervalValue);
 		}
 	})
 </script>
@@ -96,8 +109,13 @@
 	</div>
 
 	<div class="bg-gray-100 p-4 rounded-lg">
-		<h2 class="text-lg font-semibold">Threshold:</h2>
+		<h2 class="text-lg font-semibold">Valor para alerta: 0 para desabilitar</h2>
 		<input type="number" bind:value={threshold} oninput={updateThreshold} class="w-full p-2 border rounded" />
+	</div>
+
+	<div class="bg-gray-100 p-4 rounded-lg">
+		<h2 class="text-lg font-semibold">Intervalo de verificação em minutos:</h2>
+		<input type="number" bind:value={intervalValue} oninput={updateIntervalValue} class="w-full p-2 border rounded" />
 	</div>
 	{#if audioEnabled}
 		<button
