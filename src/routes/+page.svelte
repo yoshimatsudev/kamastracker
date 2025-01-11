@@ -28,7 +28,6 @@
 		try {
 			const response = await fetch('/');
 			const data = await response.json();
-			console.log(data, 'ran after X minutes');
 			kamasValues = data;
 
 			const values = data.map((item) => {
@@ -42,7 +41,6 @@
 				values.forEach((item) => {
 					if (parseFloat(item.paypalValue) >= threshold) {
 						if (audioEnabled && audio) {
-							console.log(audioEnabled, 'audioEnabled');
 							audio.play();
 						}
 
@@ -60,7 +58,7 @@
 				{ serverName: '', paypalValue: 0 }
 			);
 		} catch (error) {
-			console.error('Error fetching data:', error);
+			console.error('Error fetching data contact developer', error);
 		}
 	}
 
@@ -71,7 +69,7 @@
 	$effect(() => {
 		setInterval(fetchDataAndCheckAlarms, 1 * 60 * 1000);
 
-		fetchDataAndCheckAlarms();
+		// fetchDataAndCheckAlarms();
 	});
 
 	$effect(() => {
@@ -104,12 +102,12 @@
 	{#if audioEnabled}
 		<button
 			class="w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-			onclick={enableAudio}>Disable Audio Alerts</button
+			onclick={enableAudio}>Desabilitar alerta de audio</button
 		>
 	{:else}
 		<button
 			class="w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-			onclick={enableAudio}>Enable Audio Alerts</button
+			onclick={enableAudio}>Habilitar alerta de audio</button
 		>
 	{/if}
 </div>
