@@ -1,6 +1,4 @@
 import * as cheerio from "cheerio";
-import { ContractMissingDeployDataError } from "web3";
-
 
 export async function GET() {
   const response = await fetch("https://www.leskamas.com/en-gb/sell-kamas.html", {
